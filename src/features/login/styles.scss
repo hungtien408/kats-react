@@ -1,0 +1,16 @@
+.background {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 auto;
+
+  background-color: #3f51b5;
+  padding: 40px;
+
+  min-height: 100vh;
+  // text-align: center;
+}
+.login-form {
+  width: 25rem;
+}

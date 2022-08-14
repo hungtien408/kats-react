@@ -1,0 +1,16 @@
+.menu-link-active {
+  & > div {
+    background-color: #0000000a;
+  }
+}
+
+.menu-parent {
+  padding-left: 0;
+}
+
+.menu-sub {
+  padding-left: 20px !important;
+  & .MuiList-root {
+    padding-left: 30px;
+  }
+}
