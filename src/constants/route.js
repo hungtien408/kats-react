@@ -3,6 +3,7 @@ import React from 'react';
 const Login = React.lazy(() => import('features/login'));
 const Dashboard = React.lazy(() => import('features/dashboard'));
 const Product = React.lazy(() => import('features/product'));
+const Order = React.lazy(() => import('features/order'));
 
 export const ROUTES = [
   {
@@ -29,9 +30,9 @@ export const ADMIN_ROUTES = [
     path: '/sell-pages',
     items: [
       {
-        name: 'Duyệt giá',
-        path: '/management/price-request',
-        // component: PriceRequest,
+        name: 'Đơn hàng',
+        path: '/management/order',
+        component: Order,
       },
       {
         name: 'Level 3',

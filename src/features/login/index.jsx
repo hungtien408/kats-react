@@ -3,7 +3,11 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { AUTHORIZATION_EXPIRY, AUTHORIZATION_KEY } from '../../constants/global';
+import {
+  AUTHORIZATION_EXPIRY,
+  AUTHORIZATION_KEY,
+  AUTHORIZATION_TIME,
+} from '../../constants/global';
 import LoginForm from './components/login-form';
 import { login } from './login-slice';
 import './styles.scss';
@@ -19,7 +23,9 @@ function Login() {
       const resultAction = await dispatch(action);
       const { AccessToken } = unwrapResult(resultAction);
       localStorage.setItem(AUTHORIZATION_KEY, AccessToken.Token);
-      localStorage.setItem(AUTHORIZATION_EXPIRY, AccessToken.ExpiresIn);
+      localStorage.setItem(AUTHORIZATION_EXPIRY, 900000); // miliseconds at 15 minutes localStorage.setItem(AUTHORIZATION_EXPIRY, AccessToken.ExpiresIn);
+      localStorage.setItem(AUTHORIZATION_TIME, new Date().getTime());
+
       history.push('/');
     } catch (error) {
       enqueueSnackbar(error.message, { variant: 'error' });

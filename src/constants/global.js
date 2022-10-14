@@ -13,6 +13,7 @@ export const STATUS_CODE = {
   UNAUTHORIZED: 401,
 };
 
-export const AUTHORIZATION_KEY = 'TOKEN';
-export const AUTHORIZATION_EXPIRY = 3000;
+export const AUTHORIZATION_KEY = 'AUTH_TOKEN';
+export const AUTHORIZATION_EXPIRY = 'AUTH_EXPIRY';
+export const AUTHORIZATION_TIME = 'AUTH_TIME';
 export const DEVICE_ID = 'device-id';

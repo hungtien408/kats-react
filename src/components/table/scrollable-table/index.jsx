@@ -36,7 +36,7 @@ function ScrollableTable(props) {
       window.innerHeight -
       (bannerHeight > 0 ? bannerHeight : 54) -
       (headerHeight > 0 ? headerHeight : 85) -
-      60 - // pagination
+      25 - // pagination
       adjustHeight;
     const contentHeight = (gridHeight > 300 ? gridHeight : 300).toString();
     setContentHeight(contentHeight);

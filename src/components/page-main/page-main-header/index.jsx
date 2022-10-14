@@ -8,6 +8,7 @@ import InputField from 'components/form-controls/input-field';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -84,6 +85,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 PageMainHeader.propTypes = {
+  feature: PropTypes.string,
   icon: PropTypes.string,
   page: PropTypes.string,
   title: PropTypes.string,
@@ -97,6 +99,7 @@ PageMainHeader.propTypes = {
 };
 
 PageMainHeader.defaultProps = {
+  feature: '',
   icon: 'assignment',
   page: '',
   title: '',
@@ -111,7 +114,10 @@ PageMainHeader.defaultProps = {
 
 function PageMainHeader(props) {
   const classes = useStyles();
+  const auth = useSelector((state) => state.auth);
+  const { Permissions } = auth;
   const {
+    feature,
     icon,
     page,
     title,
@@ -129,6 +135,8 @@ function PageMainHeader(props) {
       searchInput: '',
     },
   });
+
+  const allowCreate = Permissions.some((x) => x.Name === `${feature}Create`);
 
   return (
     <div className={classes.root}>
@@ -177,7 +185,7 @@ function PageMainHeader(props) {
               <CloudUploadOutlinedIcon /> Nhập Excel
             </Button>
           )}
-          {handleCreate !== undefined && handleCreate != null && (
+          {handleCreate && allowCreate && (
             <Button className={classes.headerBtn} onClick={handleCreate}>
               <AddOutlinedIcon /> Tạo mới
             </Button>

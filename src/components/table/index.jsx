@@ -1,5 +1,6 @@
 import {
   IconButton,
+  makeStyles,
   Table,
   TableBody,
   TableCell,
@@ -11,6 +12,12 @@ import { Delete as DeleteIcon, Edit as EditIcon } from '@material-ui/icons';
 import Pager from 'components/pager';
 import PropTypes from 'prop-types';
 import ScrollableTable from './scrollable-table';
+
+const useStyles = makeStyles(() => ({
+  cell: {
+    padding: '0 5px',
+  },
+}));
 
 DataTable.propTypes = {
   list: PropTypes.array,
@@ -31,6 +38,7 @@ function DataTable({
   actionEdit = null,
   actionDelete = null,
 }) {
+  const classes = useStyles();
   const applyFiltered = (column, event) => {
     if (!handleFiltered) return;
 
@@ -62,33 +70,41 @@ function DataTable({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">STT</TableCell>
+              <TableCell className={classes.cell} align="center">
+                STT
+              </TableCell>
               {displayColumns.map((item, index) => (
-                <TableCell key={index} align={item.align}>
+                <TableCell className={classes.cell} key={index} align={item.align}>
                   <div>{item.title}</div>
                   <TextField
                     label={`Tìm theo ${item.title}`}
                     type={item.type}
                     variant="standard"
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', marginBottom: '5px' }}
                     onChange={(e) => applyFiltered(item.field, e)}
                   />
                 </TableCell>
               ))}
-              {(actionEdit || actionDelete) && <TableCell align="center">Hành động</TableCell>}
+              {(actionEdit || actionDelete) && (
+                <TableCell className={classes.cell} align="center">
+                  Hành động
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
             {list.map((row, index) => (
               <TableRow key={row.id}>
-                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell className={classes.cell} align="center">
+                  {index + 1}
+                </TableCell>
                 {displayColumns.map((item, index) => (
-                  <TableCell key={index} align={item.align}>
+                  <TableCell className={classes.cell} key={index} align={item.align}>
                     {row[item.field]}
                   </TableCell>
                 ))}
                 {(actionEdit || actionDelete) && (
-                  <TableCell align="center" width="150px">
+                  <TableCell className={classes.cell} align="center" width="150px">
                     {actionEdit && (
                       <IconButton aria-label="edit" onClick={() => handleEditClick(row)}>
                         <EditIcon fontSize="small" color="primary" />

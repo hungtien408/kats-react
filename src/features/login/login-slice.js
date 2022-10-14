@@ -2,8 +2,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import loginApi from 'api/login-api';
 import { DEVICE_ID } from 'constants/global';
 
-export const login = createAsyncThunk('login', async (payload) => {
+export const login = createAsyncThunk('login', async (payload, thunkAPI) => {
   const response = await loginApi.post(payload);
+
+  // get user me
+  await thunkAPI.dispatch(getUserMe());
+
+  return response;
+});
+
+export const getUserMe = createAsyncThunk('getUserMe', async () => {
+  const response = await loginApi.getUserMe();
   return response;
 });
 
@@ -16,6 +25,11 @@ const auth = createSlice({
     },
     RefreshToken: '',
     DeviceId: DEVICE_ID,
+    Name: '',
+    Email: '',
+    BusinessUnitIds: [],
+    Permissions: [],
+    UserRoles: [],
   },
   reducers: {},
   extraReducers: {
@@ -23,6 +37,15 @@ const auth = createSlice({
       const { AccessToken, RefreshToken } = action.payload;
       state.AccessToken = AccessToken;
       state.RefreshToken = RefreshToken;
+    },
+    [getUserMe.fulfilled]: (state, action) => {
+      const { UserAccount } = action.payload;
+      const { Name, Email, BusinessUnitIds, Permissions, UserRoles } = UserAccount;
+      state.Name = Name;
+      state.Email = Email;
+      state.BusinessUnitIds = BusinessUnitIds;
+      state.Permissions = Permissions;
+      state.UserRoles = UserRoles;
     },
   },
 });

@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { AUTHORIZATION_KEY } from '../../../constants/global';
+import {
+  AUTHORIZATION_EXPIRY,
+  AUTHORIZATION_KEY,
+  AUTHORIZATION_TIME,
+} from '../../../constants/global';
 import Content from './content';
 import './styles.scss';
 
@@ -22,12 +26,17 @@ AdminLayout.defaultProps = {
 function AdminLayout(props) {
   const { component: NewComponent, ...remainProps } = props;
   const token = localStorage.getItem(AUTHORIZATION_KEY);
+  const expiry = localStorage.getItem(AUTHORIZATION_EXPIRY);
+  const time = localStorage.getItem(AUTHORIZATION_TIME);
+  const currDate = new Date().getTime();
+  const miliseconds = Math.abs(currDate - time);
+  const isActive = miliseconds < expiry;
 
   return (
     <Route
       {...remainProps}
       render={(routeProps) =>
-        token ? (
+        token && isActive ? (
           <Content {...remainProps}>
             <NewComponent {...routeProps} />
           </Content>

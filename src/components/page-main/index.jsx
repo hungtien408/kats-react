@@ -13,6 +13,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 PageMain.propTypes = {
+  feature: PropTypes.string.isRequired,
   icon: PropTypes.string,
   page: PropTypes.string,
   title: PropTypes.string,
@@ -26,6 +27,7 @@ PageMain.propTypes = {
 };
 
 PageMain.defaultProps = {
+  feature: '',
   icon: 'assignment',
   page: '',
   title: '',
@@ -41,6 +43,7 @@ PageMain.defaultProps = {
 function PageMain(props) {
   const classes = useStyles();
   const {
+    feature,
     icon,
     page,
     title,
@@ -56,6 +59,7 @@ function PageMain(props) {
   return (
     <div className={classes.root}>
       <PageMainHeader
+        feature={feature}
         icon={icon}
         page={page}
         title={title}
