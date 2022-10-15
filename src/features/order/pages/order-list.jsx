@@ -3,7 +3,8 @@ import PageMain from 'components/page-main';
 import DataTable from 'components/table';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOrderList, setFilter } from '../order-slice';
+import { getQueryString } from 'utils/query-string';
+import { getOrderList, setFilter, setPage } from '../order-slice';
 
 const useStyles = makeStyles((theme) => ({
   closeButton: {
@@ -19,7 +20,7 @@ function OrderList(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order);
-  const { list, filter, pagination } = order;
+  const { items, pageIndex, pageSize, totalCount, filters } = order;
 
   const displayColumns = [
     {
@@ -49,20 +50,30 @@ function OrderList(props) {
   ];
 
   useEffect(() => {
-    dispatch(getOrderList(filter));
-  }, [dispatch, filter]);
+    const params = { pageIndex, pageSize };
+    const queryString = getQueryString(params, filters);
+    dispatch(getOrderList(queryString));
+  }, [dispatch, filters, pageIndex, pageSize]);
 
   const onFiltered = (key, value) => {
-    dispatch(setFilter({ ...filter, [key]: value || undefined }));
+    const filter = {
+      Field: key,
+      Operator: '==',
+      Value: value,
+    };
+    const newFilters = filters.filter((x) => x.Field !== filter.Field);
+    dispatch(setFilter([filter, ...newFilters]));
   };
 
   const onSearchEnter = (values) => {
-    const { searchInput } = values;
-    dispatch(setFilter({ ...filter, q: searchInput || undefined }));
+    // const { searchInput } = values;
+    // dispatch(setFilter({ ...filter, q: searchInput || undefined }));
   };
 
   const onRefresh = () => {
-    dispatch(getOrderList({ ...filter, PageIndex: 0 }));
+    const params = { pageIndex, pageSize };
+    const queryString = getQueryString(params, filters);
+    dispatch(getOrderList(queryString));
   };
 
   const onCreate = (e) => {
@@ -71,7 +82,7 @@ function OrderList(props) {
   };
 
   const onPageChange = (page) => {
-    dispatch(setFilter({ ...filter, PageIndex: page - 1 }));
+    dispatch(setPage(page - 1));
   };
 
   const handleActionEdit = (product) => {
@@ -94,9 +105,11 @@ function OrderList(props) {
       handleCreate={onCreate}
     >
       <DataTable
-        list={list}
+        items={items}
         displayColumns={displayColumns}
-        pagination={pagination}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        totalCount={totalCount}
         handleFiltered={onFiltered}
         handlePageChange={onPageChange}
         actionEdit={handleActionEdit}

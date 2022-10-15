@@ -20,9 +20,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 DataTable.propTypes = {
-  list: PropTypes.array,
+  items: PropTypes.array,
   displayColumns: PropTypes.array,
-  pagination: PropTypes.object,
+  pageIndex: PropTypes.number,
+  pageSize: PropTypes.number,
+  totalCount: PropTypes.number,
   handleFiltered: PropTypes.func,
   handlePageChange: PropTypes.func,
   actionEdit: PropTypes.func,
@@ -30,9 +32,11 @@ DataTable.propTypes = {
 };
 
 function DataTable({
-  list = [],
+  items = [],
   displayColumns = [],
-  pagination = {},
+  pageIndex = 0,
+  pageSize = 0,
+  totalCount = 0,
   handleFiltered = null,
   handlePageChange = null,
   actionEdit = null,
@@ -44,8 +48,7 @@ function DataTable({
 
     setTimeout(() => {
       const { value } = event.target;
-      const key = typeof value === 'string' ? `${column}_like` : column;
-      handleFiltered(key, value);
+      handleFiltered(column, value);
     }, 500);
   };
 
@@ -95,7 +98,7 @@ function DataTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.map((row, index) => (
+            {items.map((row, index) => (
               <TableRow key={index}>
                 <TableCell className={classes.cell} align="center">
                   {index + 1}
@@ -124,12 +127,7 @@ function DataTable({
           </TableBody>
         </Table>
       </ScrollableTable>
-      <Pager
-        page={pagination.PageIndex}
-        total={pagination.TotalCount}
-        limit={pagination.PageSize}
-        changePage={pageChange}
-      />
+      <Pager page={pageIndex + 1} total={totalCount} limit={pageSize} changePage={pageChange} />
     </>
   );
 }

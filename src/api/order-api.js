@@ -1,9 +1,9 @@
 import axiosClient from './axios-client';
 
 const orderApi = {
-  getAll: (params) => {
-    const url = '/orders';
-    return axiosClient.get(url, { params });
+  getAll: (queryString = '') => {
+    const url = '/orders?';
+    return axiosClient.get(`${url}${queryString}`);
   },
   get: (id) => {
     const url = `/orders/${id}`;
