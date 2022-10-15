@@ -76,13 +76,15 @@ function DataTable({
               {displayColumns.map((item, index) => (
                 <TableCell className={classes.cell} key={index} align={item.align}>
                   <div>{item.title}</div>
-                  <TextField
-                    label={`Tìm theo ${item.title}`}
-                    type={item.type}
-                    variant="standard"
-                    style={{ width: '100%', marginBottom: '5px' }}
-                    onChange={(e) => applyFiltered(item.field, e)}
-                  />
+                  {item.type === 'text' && (
+                    <TextField
+                      label={`Tìm theo ${item.title}`}
+                      type={item.type}
+                      variant="standard"
+                      style={{ width: '100%', marginBottom: '5px' }}
+                      onChange={(e) => applyFiltered(item.field, e)}
+                    />
+                  )}
                 </TableCell>
               ))}
               {(actionEdit || actionDelete) && (
@@ -94,7 +96,7 @@ function DataTable({
           </TableHead>
           <TableBody>
             {list.map((row, index) => (
-              <TableRow key={row.id}>
+              <TableRow key={index}>
                 <TableCell className={classes.cell} align="center">
                   {index + 1}
                 </TableCell>
@@ -123,9 +125,9 @@ function DataTable({
         </Table>
       </ScrollableTable>
       <Pager
-        page={pagination._page}
-        total={pagination._totalRows}
-        limit={pagination._limit}
+        page={pagination.PageIndex}
+        total={pagination.TotalCount}
+        limit={pagination.PageSize}
         changePage={pageChange}
       />
     </>

@@ -62,7 +62,7 @@ function OrderList(props) {
   };
 
   const onRefresh = () => {
-    dispatch(getOrderList({ ...filter, _page: 1 }));
+    dispatch(getOrderList({ ...filter, PageIndex: 0 }));
   };
 
   const onCreate = (e) => {
@@ -71,7 +71,7 @@ function OrderList(props) {
   };
 
   const onPageChange = (page) => {
-    dispatch(setFilter({ ...filter, _page: page }));
+    dispatch(setFilter({ ...filter, PageIndex: page - 1 }));
   };
 
   const handleActionEdit = (product) => {

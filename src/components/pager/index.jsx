@@ -33,6 +33,7 @@ Pager.defaultProps = {
 
 function Pager({ page, total, limit, changePage }) {
   const classes = useStyles();
+  const count = Math.ceil(total / limit);
 
   const onPageChange = (_e, page) => {
     if (!changePage) return;
@@ -41,13 +42,10 @@ function Pager({ page, total, limit, changePage }) {
 
   return (
     <Box className={classes.pager}>
-      <span className={classes.description}>Tổng cộng {total} bản ghi </span>
-      <Pagination
-        shape="rounded"
-        count={Math.ceil(total / limit)}
-        page={page}
-        onChange={onPageChange}
-      />
+      <span className={classes.description}>
+        Tổng cộng {total} bản ghi | Trang {page}/{count}
+      </span>
+      <Pagination shape="rounded" count={count} page={page} onChange={onPageChange} />
     </Box>
   );
 }

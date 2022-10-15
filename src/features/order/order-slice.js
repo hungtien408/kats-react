@@ -12,27 +12,26 @@ const order = createSlice({
     loading: false,
     list: [],
     filter: {
-      _page: 1,
-      _limit: 20,
-      _sort: 'createdDate',
-      _order: 'DESC',
+      PageIndex: 0,
+      PageSize: 20,
     },
     pagination: {
-      _page: 1,
-      _limit: 15,
-      _totalRows: 15,
+      PageIndex: 1,
+      PageSize: 20,
+      TotalCount: 15,
     },
   },
   reducers: {
     setFilter: (state, action) => {
       state.filter = action.payload;
+      state.pagination = { ...state.pagination, PageIndex: action.payload.PageIndex + 1 };
     },
   },
   extraReducers: {
     [getOrderList.fulfilled]: (state, action) => {
       const { Orders, TotalCount } = action.payload;
       state.list = Orders;
-      state.pagination = { ...state.pagination, _totalRows: TotalCount };
+      state.pagination = { ...state.pagination, TotalCount };
     },
   },
 });

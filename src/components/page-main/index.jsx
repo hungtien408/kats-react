@@ -17,7 +17,7 @@ PageMain.propTypes = {
   icon: PropTypes.string,
   page: PropTypes.string,
   title: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.object,
   handleSearchEnter: PropTypes.func,
   handleRefresh: PropTypes.func,
   handleFilter: PropTypes.func,

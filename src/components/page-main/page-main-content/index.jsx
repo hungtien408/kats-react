@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 PageMainContent.propTypes = {
-  children: PropTypes.array,
+  children: PropTypes.object,
 };
 
 PageMainContent.defaultProps = {
