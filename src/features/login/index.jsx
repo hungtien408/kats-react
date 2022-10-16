@@ -9,7 +9,7 @@ import {
   AUTHORIZATION_TIME,
 } from '../../constants/global';
 import LoginForm from './components/login-form';
-import { login } from './login-slice';
+import { getUserMe, login } from './login-slice';
 import './styles.scss';
 
 function Login() {
@@ -25,6 +25,9 @@ function Login() {
       localStorage.setItem(AUTHORIZATION_KEY, AccessToken.Token);
       localStorage.setItem(AUTHORIZATION_EXPIRY, 900000); // miliseconds at 15 minutes localStorage.setItem(AUTHORIZATION_EXPIRY, AccessToken.ExpiresIn);
       localStorage.setItem(AUTHORIZATION_TIME, new Date().getTime());
+
+      // get user me
+      await dispatch(getUserMe());
 
       history.push('/');
     } catch (error) {

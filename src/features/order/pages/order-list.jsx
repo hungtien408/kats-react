@@ -56,13 +56,16 @@ function OrderList(props) {
   }, [dispatch, filters, pageIndex, pageSize]);
 
   const onFiltered = (key, value) => {
-    const filter = {
+    const objFilter = {
       Field: key,
       Operator: '==',
       Value: value,
     };
-    const newFilters = filters.filter((x) => x.Field !== filter.Field);
-    dispatch(setFilter([filter, ...newFilters]));
+    let newFilters = filters.filter((x) => x.Field !== objFilter.Field);
+    if (objFilter.Value !== '') {
+      newFilters = [objFilter, ...newFilters];
+    }
+    dispatch(setFilter(newFilters));
   };
 
   const onSearchEnter = (values) => {

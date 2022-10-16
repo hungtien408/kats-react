@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {
   AppBar,
   CssBaseline,
@@ -8,16 +6,23 @@ import {
   IconButton,
   List,
   makeStyles,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
   useTheme,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import LanguageIcon from '@material-ui/icons/Language';
+import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
+import { AUTHORIZATION_KEY } from 'constants/global';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 import { ADMIN_ROUTES } from '../../../../constants/route';
-import { NavLink } from 'react-router-dom';
 import NavItem from '../nav-item';
 
 const drawerWidth = 240;
@@ -68,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -drawerWidth,
+    marginTop: '63px',
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -75,6 +81,12 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
+  },
+  menuRight: {
+    display: 'flex',
+  },
+  headerGrow: {
+    flexGrow: 1,
   },
 }));
 
@@ -84,9 +96,12 @@ Content.propTypes = {
 
 function Content(props) {
   const { children } = props;
+  const [open, setOpen] = useState(false);
+  const [anchorMenuRight, setAnchorMenuRight] = useState(null);
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const menuId = 'primary-search-account-menu';
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -96,7 +111,40 @@ function Content(props) {
     setOpen(false);
   };
 
-  const renderList = () => {
+  const handleProfileMenuOpen = (event) => {
+    setAnchorMenuRight(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorMenuRight(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem(AUTHORIZATION_KEY);
+    if (history) {
+      history.push('/login');
+    }
+  };
+
+  const renderMenuRight = () => {
+    const isMenuOpen = Boolean(anchorMenuRight);
+    return (
+      <Menu
+        anchorEl={anchorMenuRight}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        id={menuId}
+        keepMounted
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
+    );
+  };
+
+  const renderMenuLeft = () => {
     let xhtml = null;
     xhtml = (
       <div>
@@ -144,6 +192,21 @@ function Content(props) {
           <Typography variant="h6" noWrap>
             CRUD
           </Typography>
+          <div className={classes.headerGrow} />
+          <div className={classes.menuRight}>
+            <IconButton color="inherit">
+              <LanguageIcon />
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -161,16 +224,16 @@ function Content(props) {
           </IconButton>
         </div>
         <Divider />
-        {renderList()}
+        {renderMenuLeft()}
       </Drawer>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader} />
         {children}
       </main>
+      {renderMenuRight()}
     </div>
   );
 }

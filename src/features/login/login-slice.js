@@ -2,12 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import loginApi from 'api/login-api';
 import { DEVICE_ID } from 'constants/global';
 
-export const login = createAsyncThunk('login', async (payload, thunkAPI) => {
+export const login = createAsyncThunk('login', async (payload) => {
   const response = await loginApi.post(payload);
-
-  // get user me
-  await thunkAPI.dispatch(getUserMe());
-
   return response;
 });
 
